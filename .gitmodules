@@ -1,6 +1,0 @@
-[submodule "BetterE6Frontend"]
-	path = BetterE6Frontend
-	url = git@github.com:muddyfish/BetterE6Frontend.git
-[submodule "BetterE6Backend"]
-	path = BetterE6Backend
-	url = git@github.com:muddyfish/BetterE6Backend.git
