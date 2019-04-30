@@ -3,7 +3,7 @@ version: '3'
 services:
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:6.6.1
-    container_name: elasticsearch
+    container_name: nqn-elasticsearch
     environment:
       - cluster.name=docker-cluster
       - bootstrap.memory_lock=true
@@ -22,6 +22,8 @@ services:
       dockerfile: Dockerfile
     depends_on:
      - elasticsearch
+    volumes:
+     - lmdbdata:/lmdb
     restart: always
     networks: [app]
 
@@ -35,4 +37,6 @@ networks:
 
 volumes:
   esdata:
+    driver: local
+  lmdbdata:
     driver: local

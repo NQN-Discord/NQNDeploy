@@ -1,0 +1,3 @@
+[submodule "NQNBackend"]
+	path = NQNBackend
+	url = git@github.com:muddyfish/NQNBackend.git
