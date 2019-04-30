@@ -18,29 +18,11 @@ services:
 
   backend:
     build:
-      context: BetterE6Backend
+      context: NQNBackend
       dockerfile: Dockerfile
     depends_on:
      - elasticsearch
     restart: always
-    networks: [app]
-
-  frontend:
-    build:
-      context: BetterE6Frontend
-      dockerfile: Dockerfile
-    restart: always
-    networks: [app]
-
-  nginx:
-    build:
-      context: .
-      dockerfile: Dockerfile.nginx
-    restart: always
-    depends_on:
-     - backend
-    ports:
-     - "80:80"
     networks: [app]
 
 networks:
@@ -48,7 +30,7 @@ networks:
     ipam:
       driver: default
       config:
-      - subnet: 10.0.0.1/24
+      - subnet: 10.0.1.2/24
 
 
 volumes:
