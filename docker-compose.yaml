@@ -27,6 +27,27 @@ services:
     restart: always
     networks: [app]
 
+  frontend:
+    build:
+      context: NQNFrontend
+      dockerfile: Dockerfile
+    depends_on:
+     - backend
+    restart: always
+    networks: [app]
+
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
+    restart: always
+    depends_on:
+     - frontend
+     - backend
+    ports:
+     - "8000:80"
+    networks: [app]
+
 networks:
   app:
     ipam:
