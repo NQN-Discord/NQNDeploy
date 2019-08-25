@@ -7,6 +7,7 @@ services:
     environment:
       - cluster.name=docker-cluster
       - bootstrap.memory_lock=true
+      - xpack.security.enabled=false
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     ulimits:
       memlock:
@@ -14,6 +15,19 @@ services:
         hard: -1
     volumes:
       - esdata:/usr/share/elasticsearch/data
+    networks: [app]
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:6.6.1
+    environment:
+      - ELASTICSEARCH_HOSTS=http://nqn-elasticsearch:9200
+      - SERVER_HOST="0.0.0.0"
+      - SERVER_BASEPATH="/kibana"
+      - xpack.security.enabled=false
+    depends_on:
+      - elasticsearch
+    ports:
+      - "5601:5601"
     networks: [app]
 
   backend:
@@ -39,11 +53,12 @@ services:
   nginx:
     build:
       context: .
-      dockerfile: Dockerfile.nginx
+      dockerfile: nginx/Dockerfile.nginx
     restart: always
     depends_on:
      - frontend
      - backend
+     - kibana
     ports:
      - "8001:80"
     networks: [app]
