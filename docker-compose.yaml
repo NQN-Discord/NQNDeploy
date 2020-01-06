@@ -4,11 +4,6 @@ services:
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:6.6.1
     container_name: nqn-elasticsearch
-    healthcheck:
-        test: ["CMD-SHELL", "curl --silent --fail localhost:9200/_cluster/health || exit 1"]
-        interval: 30s
-        timeout: 30s
-        retries: 3
     environment:
       - cluster.name=docker-cluster
       - bootstrap.memory_lock=true
