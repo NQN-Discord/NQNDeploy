@@ -21,6 +21,8 @@ services:
     build:
       context: NQNBackend
       dockerfile: Dockerfile
+    healthcheck:
+      test: ["CMD", "[ \"$(curl -f http://localhost:8888/health)\" = \"0\" ]"]
     depends_on:
       - elasticsearch
     volumes:
