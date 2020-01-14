@@ -23,6 +23,8 @@ services:
       dockerfile: Dockerfile
     healthcheck:
       test: ["CMD", "[ \"$(curl -f http://localhost:8888/health)\" = \"0\" ]"]
+      start-period: 60s
+      retries: 1
     depends_on:
       - elasticsearch
     volumes:
