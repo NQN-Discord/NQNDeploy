@@ -64,6 +64,7 @@ services:
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
+    networks: [app]
 
   nginx:
     build:
