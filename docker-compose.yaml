@@ -1,4 +1,4 @@
-version: '3'
+version: '3.4'
 
 services:
   elasticsearch:
@@ -9,12 +9,14 @@ services:
       - bootstrap.memory_lock=true
       - xpack.security.enabled=false
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - 'path.repo=/usr/share/elasticsearch/backup'
     ulimits:
       memlock:
         soft: -1
         hard: -1
     volumes:
       - esdata:/usr/share/elasticsearch/data
+    restart: always
     networks: [app]
 
   backend:
@@ -22,9 +24,9 @@ services:
       context: NQNBackend
       dockerfile: Dockerfile
     healthcheck:
-      test: ["CMD", "[ \"$(curl -f http://localhost:8888/health)\" = \"0\" ]"]
-      start-period: 60s
-      retries: 1
+      test: "[ \"$$(curl -f http://localhost:8888/health)\" = \"0\" ]"
+      retries: 3
+      start_period: 30m
     depends_on:
       - elasticsearch
     volumes:
@@ -36,8 +38,6 @@ services:
     build:
       context: NQNFrontend
       dockerfile: Dockerfile
-    depends_on:
-     - backend
     restart: always
     networks: [app]
 
@@ -52,6 +52,7 @@ services:
       - elasticsearch
     ports:
       - "5601:5601"
+    restart: always
     networks: [app]
 
   netdata:
@@ -64,6 +65,7 @@ services:
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
+    restart: always
     networks: [app]
 
   nginx:
@@ -71,14 +73,17 @@ services:
       context: .
       dockerfile: nginx/Dockerfile.nginx
     restart: always
-    depends_on:
-     - frontend
-     - backend
-     - kibana
-     - netdata
     ports:
      - "8001:80"
     networks: [app]
+
+  autoheal:
+    restart: always
+    image: willfarrell/autoheal
+    environment:
+      - AUTOHEAL_CONTAINER_LABEL=all
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
 
 networks:
   app:
