@@ -1,25 +1,7 @@
 version: '3.4'
 
 services:
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.6.1
-    container_name: nqn-elasticsearch
-    environment:
-      - cluster.name=docker-cluster
-      - bootstrap.memory_lock=true
-      - xpack.security.enabled=false
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      - 'path.repo=/usr/share/elasticsearch/backup'
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    volumes:
-      - esdata:/usr/share/elasticsearch/data
-    restart: always
-    networks: [app]
-
-  backend:
+  commands:
     build:
       context: NQNBackend
       dockerfile: Dockerfile
@@ -41,30 +23,59 @@ services:
     restart: always
     networks: [app]
 
+  gateway:
+    build:
+      context: GatewayHandler
+      dockerfile: Dockerfile
+    restart: always
+    networks: [app]
+
+  status:
+    build:
+      context: StatusUpdate
+      dockerfile: Dockerfile
+    restart: always
+    networks: [app]
+
+  members:
+    build:
+      context: MemberKeeper
+      dockerfile: Dockerfile
+    restart: always
+    networks: [app]
+
+  reacts:
+    build:
+      context: ReactionHandler
+      dockerfile: Dockerfile
+    restart: always
+    networks: [app]
+
+  messages:
+    build:
+      context: MessageHandler
+      dockerfile: Dockerfile
+    restart: always
+    networks: [app]
+
+  state:
+    build:
+      context: StateKeeper
+      dockerfile: Dockerfile
+    restart: always
+    networks: [app]
+
   kibana:
     image: docker.elastic.co/kibana/kibana:6.6.1
     environment:
-      - ELASTICSEARCH_HOSTS=http://nqn-elasticsearch:9200
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
       - SERVER_HOST="0.0.0.0"
       - SERVER_BASEPATH="/kibana"
       - xpack.security.enabled=false
     depends_on:
       - elasticsearch
     ports:
-      - "5601:5601"
-    restart: always
-    networks: [app]
-
-  netdata:
-    image: netdata/netdata
-    hostname: blue.nqn
-    cap_add:
-      - SYS_PTRACE
-    security_opt:
-      - apparmor:unconfined
-    volumes:
-      - /proc:/host/proc:ro
-      - /sys:/host/sys:ro
+      - "5602:5601"
     restart: always
     networks: [app]
 
@@ -74,7 +85,7 @@ services:
       dockerfile: nginx/Dockerfile.nginx
     restart: always
     ports:
-     - "8001:80"
+     - "8002:80"
     networks: [app]
 
   autoheal:
@@ -85,16 +96,67 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 
+  redis:
+    image: bitnami/redis:latest
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL,CONFIG
+    volumes:
+      - 'redis_data:/bitnami/redis/data'
+    restart: always
+    networks: [app]
+
+  postgres:
+    image: "postgres" # use latest official postgres version
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    restart: always
+    networks: [app]
+
+  rabbit:
+    image: rabbitmq:3-management-alpine
+    volumes:
+      - rabbit_data:/var/lib/rabbitmq/
+    restart: always
+    networks: [app]
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.6.1
+    environment:
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - 'path.repo=/usr/share/elasticsearch/backup'
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    restart: always
+    networks: [app]
+
 networks:
   app:
     ipam:
       driver: default
       config:
-      - subnet: 10.0.1.2/24
+      - subnet: 10.0.2.0/24
 
 
 volumes:
   esdata:
     driver: local
   lmdbdata:
+    driver: local
+  redis_data:
+    driver: local
+  postgres_data:
+    driver: local
+  rabbit_data:
     driver: local

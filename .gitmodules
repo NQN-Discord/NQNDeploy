@@ -1,6 +1,24 @@
 [submodule "NQNBackend"]
 	path = NQNBackend
-	url = git@github.com:muddyfish/NQNBackend.git
+	url = git@github.com:NQN-Discord/NQNBackend.git
 [submodule "NQNFrontend"]
 	path = NQNFrontend
-	url = git@github.com:muddyfish/NQNFrontend.git
+	url = git@github.com:NQN-Discord/NQNFrontend.git
+[submodule "GatewayHandler"]
+	path = GatewayHandler
+	url = git@github.com:NQN-Discord/GatewayHandler.git
+[submodule "StatusUpdate"]
+	path = StatusUpdate
+	url = git@github.com:NQN-Discord/StatusUpdate.git
+[submodule "MemberKeeper"]
+	path = MemberKeeper
+	url = git@github.com:NQN-Discord/MemberKeeper.git
+[submodule "ReactionHandler"]
+	path = ReactionHandler
+	url = git@github.com:NQN-Discord/ReactionHandler.git
+[submodule "MessageHandler"]
+	path = MessageHandler
+	url = git@github.com:NQN-Discord/MessageHandler.git
+[submodule "StateKeeper"]
+	path = StateKeeper
+	url = git@github.com:NQN-Discord/StateKeeper.git
