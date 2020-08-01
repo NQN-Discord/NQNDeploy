@@ -23,6 +23,13 @@ services:
     restart: always
     networks: [app]
 
+  guild_builder:
+    build:
+      context: GuildBuilder
+      dockerfile: Dockerfile
+    restart: always
+    networks: [app]
+
   gateway:
     build:
       context: GatewayHandler
@@ -54,6 +61,13 @@ services:
   messages:
     build:
       context: MessageHandler
+      dockerfile: Dockerfile
+    restart: always
+    networks: [app]
+
+  data_remover:
+    build:
+      context: DataRemover
       dockerfile: Dockerfile
     restart: always
     networks: [app]
@@ -106,6 +120,17 @@ services:
     restart: always
     networks: [app]
 
+
+  redis_persistent:
+    image: bitnami/redis:latest
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL,CONFIG
+    volumes:
+      - 'persistent_redis_data:/bitnami/redis/data'
+    restart: always
+    networks: [app]
+
   postgres:
     image: "postgres" # use latest official postgres version
     environment:
@@ -155,6 +180,8 @@ volumes:
   lmdbdata:
     driver: local
   redis_data:
+    driver: local
+  persistent_redis_data:
     driver: local
   postgres_data:
     driver: local

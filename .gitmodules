@@ -22,3 +22,9 @@
 [submodule "StateKeeper"]
 	path = StateKeeper
 	url = git@github.com:NQN-Discord/StateKeeper.git
+[submodule "DataRemover"]
+	path = DataRemover
+	url = git@github.com:NQN-Discord/DataRemover.git
+[submodule "GuildBuilder"]
+	path = GuildBuilder
+	url = git@github.com:NQN-Discord/GuildBuilder.git
