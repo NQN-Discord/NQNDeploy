@@ -1,2 +1,2 @@
-git submodule -q foreach git pull -q origin master
+git submodule -q foreach --recursive git pull -q origin release
 docker-compose up --build -d

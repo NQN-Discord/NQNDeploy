@@ -80,11 +80,12 @@ services:
     networks: [app]
 
   kibana:
-    image: docker.elastic.co/kibana/kibana:6.6.1
+    image: docker.elastic.co/kibana/kibana:7.8.1
     environment:
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
       - SERVER_HOST="0.0.0.0"
       - SERVER_BASEPATH="/kibana"
+      - SERVER_REWRITEBASEPATH=true
       - xpack.security.enabled=false
     depends_on:
       - elasticsearch
@@ -150,13 +151,15 @@ services:
     networks: [app]
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.6.1
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.8.1
     environment:
       - cluster.name=docker-cluster
       - bootstrap.memory_lock=true
       - xpack.security.enabled=false
       - "ES_JAVA_OPTS=-Xms4096m -Xmx4096m"
       - 'path.repo=/usr/share/elasticsearch/backup'
+      - network.publish_host=127.0.0.1
+      - cluster.initial_master_nodes=127.0.0.1
     ulimits:
       memlock:
         soft: -1
