@@ -11,8 +11,6 @@ services:
       start_period: 30m
     depends_on:
       - elasticsearch
-    volumes:
-     - lmdbdata:/lmdb
     restart: always
     networks: [app]
 
@@ -166,6 +164,7 @@ services:
         hard: -1
     volumes:
       - esdata:/usr/share/elasticsearch/data
+      - esbackups:/usr/share/elasticsearch/backup/backup
     restart: always
     networks: [app]
 
@@ -180,7 +179,7 @@ networks:
 volumes:
   esdata:
     driver: local
-  lmdbdata:
+  esbackups:
     driver: local
   redis_data:
     driver: local
