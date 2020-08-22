@@ -28,3 +28,6 @@
 [submodule "GuildBuilder"]
 	path = GuildBuilder
 	url = git@github.com:NQN-Discord/GuildBuilder.git
+[submodule "EmoteHasher"]
+	path = EmoteHasher
+	url = git@github.com:NQN-Discord/EmoteHasher.git

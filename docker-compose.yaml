@@ -77,6 +77,13 @@ services:
     restart: always
     networks: [app]
 
+  emote_hasher:
+    build:
+      context: EmoteHasher
+      dockerfile: Dockerfile
+    restart: always
+    networks: [app]
+
   kibana:
     image: docker.elastic.co/kibana/kibana:7.8.1
     environment:
