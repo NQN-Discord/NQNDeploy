@@ -1,0 +1,3 @@
+FROM eeacms/haproxy:latest
+COPY haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg
+

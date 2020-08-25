@@ -108,6 +108,13 @@ services:
      - "8002:80"
     networks: [app]
 
+  haproxy:
+    build:
+      context: .
+      dockerfile: haproxy/Dockerfile.haproxy
+    restart: always
+    networks: [app]
+
   autoheal:
     restart: always
     image: willfarrell/autoheal
@@ -152,6 +159,19 @@ services:
     image: rabbitmq:3-management-alpine
     volumes:
       - rabbit_data:/var/lib/rabbitmq/
+    restart: always
+    networks: [app]
+
+  netdata:
+    image: netdata/netdata
+    hostname: blue.nqn
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - apparmor:unconfined
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
     restart: always
     networks: [app]
 
