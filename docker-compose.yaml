@@ -63,13 +63,6 @@ services:
     restart: always
     networks: [app]
 
-  data_remover:
-    build:
-      context: DataRemover
-      dockerfile: Dockerfile
-    restart: always
-    networks: [app]
-
   state:
     build:
       context: StateKeeper
