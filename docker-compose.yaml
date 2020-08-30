@@ -77,6 +77,14 @@ services:
     restart: always
     networks: [app]
 
+
+  cron:
+    build:
+      context: CronScheduler
+      dockerfile: Dockerfile
+    restart: always
+    networks: [app]
+
   kibana:
     image: docker.elastic.co/kibana/kibana:7.8.1
     environment:
