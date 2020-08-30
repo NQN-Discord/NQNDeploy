@@ -22,12 +22,12 @@
 [submodule "StateKeeper"]
 	path = StateKeeper
 	url = git@github.com:NQN-Discord/StateKeeper.git
-[submodule "DataRemover"]
-	path = DataRemover
-	url = git@github.com:NQN-Discord/DataRemover.git
 [submodule "GuildBuilder"]
 	path = GuildBuilder
 	url = git@github.com:NQN-Discord/GuildBuilder.git
 [submodule "EmoteHasher"]
 	path = EmoteHasher
 	url = git@github.com:NQN-Discord/EmoteHasher.git
+[submodule "CronScheduler"]
+	path = CronScheduler
+	url = git@github.com:NQN-Discord/CronScheduler.git
