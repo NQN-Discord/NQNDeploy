@@ -82,6 +82,8 @@ services:
     build:
       context: CronScheduler
       dockerfile: Dockerfile
+    volumes:
+      - pgbackups:/backup/
     restart: always
     networks: [app]
 
@@ -146,7 +148,9 @@ services:
     networks: [app]
 
   postgres:
-    image: "postgres" # use latest official postgres version
+    build:
+      context: .
+      dockerfile: postgres/Dockerfile.postgres
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
@@ -214,6 +218,8 @@ volumes:
   persistent_redis_data:
     driver: local
   postgres_data:
+    driver: local
+  pgbackups:
     driver: local
   rabbit_data:
     driver: local

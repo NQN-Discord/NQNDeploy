@@ -1,0 +1,7 @@
+FROM postgres
+
+
+COPY postgres/pg_hba.conf /root
+RUN mv docker-entrypoint.sh docker-entrypoint-original.sh
+
+COPY postgres/docker-entrypoint.sh /
