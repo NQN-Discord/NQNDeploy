@@ -49,6 +49,13 @@ services:
     restart: always
     networks: [app]
 
+  pack_names:
+    build:
+      context: PackEmoteUpdater
+      dockerfile: Dockerfile
+    restart: always
+    networks: [app]
+
   reacts:
     build:
       context: ReactionHandler

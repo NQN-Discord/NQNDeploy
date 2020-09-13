@@ -31,3 +31,6 @@
 [submodule "CronScheduler"]
 	path = CronScheduler
 	url = git@github.com:NQN-Discord/CronScheduler.git
+[submodule "PackEmoteUpdater"]
+	path = PackEmoteUpdater
+	url = git@github.com:NQN-Discord/PackEmoteUpdater.git
