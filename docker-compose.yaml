@@ -6,9 +6,9 @@ services:
       context: NQNBackend
       dockerfile: Dockerfile
     healthcheck:
-      test: "[ \"$$(curl -f http://localhost:8888/health)\" = \"0\" ]"
+      test: "[ -f no_health ] || [ \"$$(curl -f http://localhost:8888/health)\" = \"0\" ]"
       retries: 3
-      start_period: 30m
+      start_period: 5m
     depends_on:
       - elasticsearch
     restart: always
