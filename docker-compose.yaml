@@ -28,10 +28,36 @@ services:
     restart: always
     networks: [app]
 
-  gateway:
+  gateway_0:
     build:
       context: GatewayHandler
       dockerfile: Dockerfile
+      args:
+        INSTANCES: 3
+        CURRENT: 0
+        SHARD_COUNT: 6
+    restart: always
+    networks: [app]
+
+  gateway_1:
+    build:
+      context: GatewayHandler
+      dockerfile: Dockerfile
+      args:
+        INSTANCES: 3
+        CURRENT: 1
+        SHARD_COUNT: 6
+    restart: always
+    networks: [app]
+
+  gateway_2:
+    build:
+      context: GatewayHandler
+      dockerfile: Dockerfile
+      args:
+        INSTANCES: 3
+        CURRENT: 2
+        SHARD_COUNT: 6
     restart: always
     networks: [app]
 
