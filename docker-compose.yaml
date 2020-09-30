@@ -63,13 +63,6 @@ services:
     restart: always
     networks: [app]
 
-  messages:
-    build:
-      context: MessageHandler
-      dockerfile: Dockerfile
-    restart: always
-    networks: [app]
-
   state:
     build:
       context: StateKeeper
