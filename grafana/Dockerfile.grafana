@@ -1,0 +1,5 @@
+from grafana/grafana:7.2.0
+
+RUN grafana-cli plugins install redis-datasource
+
+COPY grafana/grafana.ini /etc/grafana/grafana.ini
