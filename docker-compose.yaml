@@ -170,6 +170,14 @@ services:
     restart: always
     networks: [app]
 
+  grafana:
+    build:
+      context: .
+      dockerfile: grafana/Dockerfile.grafana
+    restart: always
+    networks: [app]
+
+
   postgres:
     build:
       context: .
