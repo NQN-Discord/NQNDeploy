@@ -35,7 +35,6 @@ services:
       args:
         INSTANCES: 3
         CURRENT: 0
-        SHARD_COUNT: 6
     restart: always
     networks: [app]
 
@@ -46,7 +45,6 @@ services:
       args:
         INSTANCES: 3
         CURRENT: 1
-        SHARD_COUNT: 6
     restart: always
     networks: [app]
 
@@ -57,7 +55,6 @@ services:
       args:
         INSTANCES: 3
         CURRENT: 2
-        SHARD_COUNT: 6
     restart: always
     networks: [app]
 
