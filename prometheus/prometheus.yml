@@ -22,3 +22,6 @@ scrape_configs:
     metrics_path: '/v0/metrics'
     static_configs:
     - targets: ['gateway_2:6001']
+  - job_name: 'commands'
+    static_configs:
+    - targets: ['commands:8888']
