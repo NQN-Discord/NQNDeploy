@@ -100,7 +100,6 @@ services:
     restart: always
     networks: [app]
 
-
   cron:
     build:
       context: CronScheduler
@@ -174,9 +173,18 @@ services:
     build:
       context: .
       dockerfile: grafana/Dockerfile.grafana
+    volumes:
+      - 'grafana_lib:/var/lib/grafana'
+      - 'grafana_etc:/etc/grafana'
     restart: always
     networks: [app]
 
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - './prometheus/prometheus.yml:/etc/prometheus/prometheus.yml'
+    restart: always
+    networks: [app]
 
   postgres:
     build:
@@ -254,3 +262,8 @@ volumes:
     driver: local
   rabbit_data:
     driver: local
+  grafana_etc:
+    driver: local
+  grafana_lib:
+    driver: local
+
