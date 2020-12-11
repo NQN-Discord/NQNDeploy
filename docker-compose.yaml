@@ -28,6 +28,13 @@ services:
     restart: always
     networks: [app]
 
+  webhook_helper:
+    build:
+      context: WebhookHelper
+      dockerfile: Dockerfile
+    restart: always
+    networks: [app]
+
   gateway_0:
     build:
       context: GatewayHandler
