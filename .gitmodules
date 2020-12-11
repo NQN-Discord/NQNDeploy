@@ -34,3 +34,6 @@
 [submodule "PackEmoteUpdater"]
 	path = PackEmoteUpdater
 	url = git@github.com:NQN-Discord/PackEmoteUpdater.git
+[submodule "WebhookHelper"]
+	path = WebhookHelper
+	url = git@github.com:NQN-Discord/WebhookHelper.git
