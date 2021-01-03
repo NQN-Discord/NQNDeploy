@@ -3,8 +3,8 @@ version: '3.4'
 services:
   commands:
     build:
-      context: NQNBackend
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: NQNBackend/Dockerfile
     healthcheck:
       test: "[ -f no_health ] || [ \"$$(curl -f http://localhost:8888/health)\" = \"0\" ]"
       retries: 3
@@ -40,7 +40,7 @@ services:
       context: GatewayHandler
       dockerfile: Dockerfile
       args:
-        INSTANCES: 3
+        INSTANCES: 4
         CURRENT: 0
     restart: always
     networks: [app]
@@ -50,7 +50,7 @@ services:
       context: GatewayHandler
       dockerfile: Dockerfile
       args:
-        INSTANCES: 3
+        INSTANCES: 4
         CURRENT: 1
     restart: always
     networks: [app]
@@ -60,8 +60,18 @@ services:
       context: GatewayHandler
       dockerfile: Dockerfile
       args:
-        INSTANCES: 3
+        INSTANCES: 4
         CURRENT: 2
+    restart: always
+    networks: [app]
+
+  gateway_3:
+    build:
+      context: GatewayHandler
+      dockerfile: Dockerfile
+      args:
+        INSTANCES: 4
+        CURRENT: 3
     restart: always
     networks: [app]
 
@@ -188,6 +198,8 @@ services:
 
   prometheus:
     image: prom/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
     volumes:
       - './prometheus/prometheus.yml:/etc/prometheus/prometheus.yml'
     restart: always

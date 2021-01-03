@@ -1,4 +1,4 @@
-FROM postgres
+FROM postgres:12
 
 
 COPY postgres/pg_hba.conf /root
