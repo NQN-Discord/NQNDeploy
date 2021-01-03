@@ -40,38 +40,8 @@ services:
       context: GatewayHandler
       dockerfile: Dockerfile
       args:
-        INSTANCES: 4
+        INSTANCES: 1
         CURRENT: 0
-    restart: always
-    networks: [app]
-
-  gateway_1:
-    build:
-      context: GatewayHandler
-      dockerfile: Dockerfile
-      args:
-        INSTANCES: 4
-        CURRENT: 1
-    restart: always
-    networks: [app]
-
-  gateway_2:
-    build:
-      context: GatewayHandler
-      dockerfile: Dockerfile
-      args:
-        INSTANCES: 4
-        CURRENT: 2
-    restart: always
-    networks: [app]
-
-  gateway_3:
-    build:
-      context: GatewayHandler
-      dockerfile: Dockerfile
-      args:
-        INSTANCES: 4
-        CURRENT: 3
     restart: always
     networks: [app]
 

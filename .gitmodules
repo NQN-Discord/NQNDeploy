@@ -37,6 +37,6 @@
 [submodule "WebhookHelper"]
 	path = WebhookHelper
 	url = git@github.com:NQN-Discord/WebhookHelper.git
-[submodule "nqn_common"]
-	path = nqn_common
-	url = git@github.com:NQN-Discord/nqn_common.git
+[submodule "translations"]
+	path = translations
+	url = git@github.com:NQN-Discord/translations.git
