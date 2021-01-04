@@ -14,6 +14,19 @@ services:
     restart: always
     networks: [app]
 
+  reposter:
+    build:
+      context: .
+      dockerfile: MessageReposter/Dockerfile
+    healthcheck:
+      test: "[ -f no_health ] || [ \"$$(curl -f http://localhost:8889/health)\" = \"0\" ]"
+      retries: 3
+      start_period: 5m
+    depends_on:
+      - elasticsearch
+    restart: always
+    networks: [app]
+
   frontend:
     build:
       context: NQNFrontend
