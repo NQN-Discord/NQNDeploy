@@ -29,6 +29,9 @@ scrape_configs:
   - job_name: 'commands'
     static_configs:
     - targets: ['commands:8888']
+  - job_name: 'reposter'
+    static_configs:
+    - targets: ['reposter:8889']
   - job_name: 'webhook_helper'
     metrics_path: '/v0/metrics'
     static_configs:
