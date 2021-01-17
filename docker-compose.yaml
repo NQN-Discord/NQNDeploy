@@ -158,6 +158,15 @@ services:
     restart: always
     networks: [app]
 
+  redis_cache:
+    image: bitnami/redis:latest
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL,CONFIG
+    volumes:
+      - 'redis_cache_data:/bitnami/redis/data'
+    restart: always
+    networks: [app]
 
   redis_persistent:
     image: bitnami/redis:latest
@@ -255,6 +264,8 @@ volumes:
   esbackups:
     driver: local
   redis_data:
+    driver: local
+  redis_cache_data:
     driver: local
   persistent_redis_data:
     driver: local
