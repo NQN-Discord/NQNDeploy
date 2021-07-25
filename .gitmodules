@@ -46,3 +46,12 @@
 [submodule "MessageReposter"]
 	path = MessageReposter
 	url = git@github.com:NQN-Discord/MessageReposter.git
+[submodule "DMHandling"]
+	path = DMHandling
+	url = git@github.com:NQN-Discord/DMHandling.git
+[submodule "PackPublisher"]
+	path = PackPublisher
+	url = git@github.com:NQN-Discord/PackPublisher.git
+[submodule "PatreonHandler"]
+	path = PatreonHandler
+	url = git@github.com:NQN-Discord/PatreonHandler.git
