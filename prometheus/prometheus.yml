@@ -1,5 +1,5 @@
 global:
-  scrape_interval:     1m # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  scrape_interval:     30s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
   evaluation_interval: 1m # Evaluate rules every 15 seconds. The default is every 1 minute.
   # scrape_timeout is set to the global default (10s).
 
@@ -10,22 +10,102 @@ rule_files:
 
 # A scrape configuration containing exactly one endpoint to scrape:
 scrape_configs:
+
   - job_name: 'gateway_0'
     metrics_path: '/v0/metrics'
     static_configs:
-    - targets: ['gateway_0:6001']
+    - targets: ['gateway_0_16:6001']
   - job_name: 'gateway_1'
     metrics_path: '/v0/metrics'
     static_configs:
-    - targets: ['gateway_1:6001']
+    - targets: ['gateway_1_16:6001']
   - job_name: 'gateway_2'
     metrics_path: '/v0/metrics'
     static_configs:
-    - targets: ['gateway_2:6001']
+    - targets: ['gateway_2_16:6001']
   - job_name: 'gateway_3'
     metrics_path: '/v0/metrics'
     static_configs:
-    - targets: ['gateway_3:6001']
+    - targets: ['gateway_3_16:6001']
+  - job_name: 'gateway_4'
+    metrics_path: '/v0/metrics'
+    static_configs:
+    - targets: ['gateway_4_16:6001']
+  - job_name: 'gateway_5'
+    metrics_path: '/v0/metrics'
+    static_configs:
+    - targets: ['gateway_5_16:6001']
+  - job_name: 'gateway_6'
+    metrics_path: '/v0/metrics'
+    static_configs:
+    - targets: ['gateway_6_16:6001']
+  - job_name: 'gateway_7'
+    metrics_path: '/v0/metrics'
+    static_configs:
+    - targets: ['gateway_7_16:6001']
+  - job_name: 'gateway_8'
+    metrics_path: '/v0/metrics'
+    static_configs:
+    - targets: ['gateway_8_16:6001']
+  - job_name: 'gateway_9'
+    metrics_path: '/v0/metrics'
+    static_configs:
+    - targets: ['gateway_9_16:6001']
+  - job_name: 'gateway_10'
+    metrics_path: '/v0/metrics'
+    static_configs:
+    - targets: ['gateway_10_16:6001']
+  - job_name: 'gateway_11'
+    metrics_path: '/v0/metrics'
+    static_configs:
+    - targets: ['gateway_11_16:6001']
+  - job_name: 'gateway_12'
+    metrics_path: '/v0/metrics'
+    static_configs:
+    - targets: ['gateway_12_16:6001']
+  - job_name: 'gateway_13'
+    metrics_path: '/v0/metrics'
+    static_configs:
+    - targets: ['gateway_13_16:6001']
+  - job_name: 'gateway_14'
+    metrics_path: '/v0/metrics'
+    static_configs:
+    - targets: ['gateway_14_16:6001']
+  - job_name: 'gateway_15'
+    metrics_path: '/v0/metrics'
+    static_configs:
+    - targets: ['gateway_15_16:6001']
+
+  - job_name: 'state_1'
+    metrics_path: '/metrics'
+    static_configs:
+    - targets: ['state_1:8888']
+    scrape_interval: 10s
+
+  - job_name: 'state_rust_1'
+    metrics_path: '/metrics'
+    static_configs:
+    - targets: ['state_rust:6200']
+    scrape_interval: 10s
+
+  - job_name: 'members_1'
+    static_configs:
+    - targets: ['members_1:6002']
+    scrape_interval: 10s
+  - job_name: 'members_2'
+    static_configs:
+    - targets: ['members_2:6002']
+    scrape_interval: 10s
+  - job_name: 'members_3'
+    static_configs:
+    - targets: ['members_3:6002']
+    scrape_interval: 10s
+  - job_name: 'members_4'
+    static_configs:
+    - targets: ['members_4:6002']
+    scrape_interval: 10s
+
+
   - job_name: 'commands'
     static_configs:
     - targets: ['commands:8888']
@@ -36,3 +116,61 @@ scrape_configs:
     metrics_path: '/v0/metrics'
     static_configs:
     - targets: ['webhook_helper:6007']
+  - job_name: 'patreon'
+    metrics_path: '/metrics'
+    static_configs:
+    - targets: ['patreon:8891']
+  - job_name: 'elastic_emote_updater'
+    metrics_path: '/metrics'
+    static_configs:
+    - targets: ['elastic_emote_updater:6001']
+  - job_name: 'status_update'
+    metrics_path: '/metrics'
+    static_configs:
+    - targets: ['status:6629']
+  - job_name: 'postgres-exporter'
+    metrics_path: '/metrics'
+    static_configs:
+    - targets: ['postgres-exporter:9187']
+  - job_name: 'emote_hasher_oracle'
+    metrics_path: '/v0/metrics'
+    static_configs:
+    - targets: ['nqn-proxy:87']
+  - job_name: 'emote_hasher'
+    metrics_path: '/v0/metrics'
+    static_configs:
+    - targets: ['emote_hasher:6006']
+  - job_name: cadvisor
+    scrape_interval: 1m
+    static_configs:
+    - targets:
+      - cadvisor:8080
+  - job_name: router
+    scrape_interval: 5s
+    static_configs:
+    - targets: ['router_exporter:9436']
+  - job_name: blackbox
+    scrape_interval: 5s
+    metrics_path: /probe
+    params:
+      module: [icmp]
+    static_configs:
+      - targets:
+        - discord.com
+        - discordapp.com
+        - 143.47.118.68
+        - 8.8.8.8
+        - 1.1.1.1
+        - 192.168.11.227
+          # First hop from home
+        - 78.33.253.139
+          # Last hop labelled as enta.net
+        - 188.39.127.244
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: blackbox:9115
+

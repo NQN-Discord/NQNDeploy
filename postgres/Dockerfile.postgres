@@ -1,7 +1,9 @@
-FROM postgres:12
+#FROM postgres:12
+FROM timescale/timescaledb-ha:pg12-latest
 
+USER root
+RUN usermod -u 999 postgres
+USER postgres
 
-COPY postgres/pg_hba.conf /root
-RUN mv docker-entrypoint.sh docker-entrypoint-original.sh
-
-COPY postgres/docker-entrypoint.sh /
+COPY postgres/pg_hba.conf /var/lib/postgresql/data/
+COPY postgres/postgresql.conf /var/lib/postgresql/data/

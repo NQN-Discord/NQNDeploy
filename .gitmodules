@@ -55,3 +55,12 @@
 [submodule "PatreonHandler"]
 	path = PatreonHandler
 	url = git@github.com:NQN-Discord/PatreonHandler.git
+[submodule "ElasticEmoteUpdater"]
+	path = ElasticEmoteUpdater
+	url = git@github.com:NQN-Discord/ElasticEmoteUpdater.git
+[submodule "StateKeeperRust"]
+	path = StateKeeperRust
+	url = git@github.com:NQN-Discord/StateKeeperRust.git
+[submodule "GatewayRust"]
+	path = GatewayRust
+	url = git@github.com:NQN-Discord/GatewayRust.git

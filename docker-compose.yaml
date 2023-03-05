@@ -1,4 +1,4 @@
-version: '3.4'
+version: '2.4'
 
 services:
   commands:
@@ -19,8 +19,8 @@ services:
       context: .
       dockerfile: MessageReposter/Dockerfile
     healthcheck:
-      test: "[ -f no_health ] || [ \"$$(curl -f http://localhost:8889/health)\" = \"0\" ]"
-      retries: 3
+      test: "[ -f no_health ] || [ \"$$(curl -f http://localhost:8889/health)\" = \"0\" ] && curl grafana:3000/api/alerts/1 | python -c \"import json, sys; sys.exit(json.loads(sys.stdin.read())['State'] == 'alerting')\" "
+      retries: 2
       start_period: 5m
     depends_on:
       - elasticsearch
@@ -41,6 +41,13 @@ services:
     restart: always
     networks: [app]
 
+  dm_handler:
+    build:
+      context: DMHandling
+      dockerfile: Dockerfile
+    restart: always
+    networks: [app]
+
   webhook_helper:
     build:
       context: WebhookHelper
@@ -48,43 +55,228 @@ services:
     restart: always
     networks: [app]
 
-  gateway_0:
+  gateway_0_16:
     build:
-      context: GatewayHandler
+      context: GatewayRust
+      dockerfile: Dockerfile
+      args: &gateway_args
+        CURRENT: 0
+        INSTANCES: 16
+        SHARD_COUNT: 880
+        MAX_CONCURRENCY: 16
+    restart: always
+    networks: [app]
+
+  gateway_1_16:
+    build:
+      context: GatewayRust
       dockerfile: Dockerfile
       args:
+        << : *gateway_args
+        CURRENT: 1
+    restart: always
+    networks: [app]
+
+  gateway_2_16:
+    build:
+      context: GatewayRust
+      dockerfile: Dockerfile
+      args:
+        << : *gateway_args
+        CURRENT: 2
+    restart: always
+    networks: [app]
+
+  gateway_3_16:
+    build:
+      context: GatewayRust
+      dockerfile: Dockerfile
+      args:
+        << : *gateway_args
+        CURRENT: 3
+    restart: always
+    networks: [app]
+
+  gateway_4_16:
+    build:
+      context: GatewayRust
+      dockerfile: Dockerfile
+      args:
+        << : *gateway_args
+        CURRENT: 4
+    restart: always
+    networks: [app]
+
+  gateway_5_16:
+    build:
+      context: GatewayRust
+      dockerfile: Dockerfile
+      args:
+        << : *gateway_args
+        CURRENT: 5
+    restart: always
+    networks: [app]
+
+  gateway_6_16:
+    build:
+      context: GatewayRust
+      dockerfile: Dockerfile
+      args:
+        << : *gateway_args
+        CURRENT: 6
+    restart: always
+    networks: [app]
+
+  gateway_7_16:
+    build:
+      context: GatewayRust
+      dockerfile: Dockerfile
+      args:
+        << : *gateway_args
+        CURRENT: 7
+    restart: always
+    networks: [app]
+
+  gateway_8_16:
+    build:
+      context: GatewayRust
+      dockerfile: Dockerfile
+      args:
+        << : *gateway_args
+        CURRENT: 8
+    restart: always
+    networks: [app]
+
+  gateway_9_16:
+    build:
+      context: GatewayRust
+      dockerfile: Dockerfile
+      args:
+        << : *gateway_args
+        CURRENT: 9
+    restart: always
+    networks: [app]
+
+  gateway_10_16:
+    build:
+      context: GatewayRust
+      dockerfile: Dockerfile
+      args:
+        << : *gateway_args
+        CURRENT: 10
+    restart: always
+    networks: [app]
+
+  gateway_11_16:
+    build:
+      context: GatewayRust
+      dockerfile: Dockerfile
+      args:
+        << : *gateway_args
+        CURRENT: 11
+    restart: always
+    networks: [app]
+
+  gateway_12_16:
+    build:
+      context: GatewayRust
+      dockerfile: Dockerfile
+      args:
+        << : *gateway_args
+        CURRENT: 12
+    restart: always
+    networks: [app]
+
+  gateway_13_16:
+    build:
+      context: GatewayRust
+      dockerfile: Dockerfile
+      args:
+        << : *gateway_args
+        CURRENT: 13
+    restart: always
+    networks: [app]
+
+  gateway_14_16:
+    build:
+      context: GatewayRust
+      dockerfile: Dockerfile
+      args:
+        << : *gateway_args
+        CURRENT: 14
+    restart: always
+    networks: [app]
+
+  gateway_15_16:
+    build:
+      context: GatewayRust
+      dockerfile: Dockerfile
+      args:
+        << : *gateway_args
+        CURRENT: 15
+    restart: always
+    networks: [app]
+
+  state_1:
+    build:
+      context: StateKeeper
+      dockerfile: Dockerfile
+      args:
+        INSTANCE: 1
+    restart: always
+    networks: [app]
+
+  state_rust:
+    build:
+      context: StateKeeperRust
+      dockerfile: Dockerfile
+    restart: always
+    networks: [app]
+
+  members_1:
+    build:
+      context: MemberKeeper
+      dockerfile: Dockerfile
+      args: 
         INSTANCES: 4
         CURRENT: 0
     restart: always
     networks: [app]
 
-  gateway_1:
+  members_2:
     build:
-      context: GatewayHandler
+      context: MemberKeeper
       dockerfile: Dockerfile
-      args:
+      args: 
         INSTANCES: 4
         CURRENT: 1
     restart: always
     networks: [app]
 
-  gateway_2:
+  members_3:
     build:
-      context: GatewayHandler
+      context: MemberKeeper
       dockerfile: Dockerfile
-      args:
+      args: 
         INSTANCES: 4
         CURRENT: 2
     restart: always
     networks: [app]
 
-  gateway_3:
+  members_4:
     build:
-      context: GatewayHandler
+      context: MemberKeeper
       dockerfile: Dockerfile
-      args:
+      args: 
         INSTANCES: 4
         CURRENT: 3
+    restart: always
+    networks: [app]
+
+  elastic_emote_updater:
+    build:
+      context: .
+      dockerfile: ElasticEmoteUpdater/Dockerfile
     restart: always
     networks: [app]
 
@@ -95,10 +287,10 @@ services:
     restart: always
     networks: [app]
 
-  members:
+  pack_publisher:
     build:
-      context: MemberKeeper
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: PackPublisher/Dockerfile
     restart: always
     networks: [app]
 
@@ -109,23 +301,17 @@ services:
     restart: always
     networks: [app]
 
-  reacts:
-    build:
-      context: ReactionHandler
-      dockerfile: Dockerfile
-    restart: always
-    networks: [app]
-
-  state:
-    build:
-      context: StateKeeper
-      dockerfile: Dockerfile
-    restart: always
-    networks: [app]
-
   emote_hasher:
     build:
       context: EmoteHasher
+      dockerfile: Dockerfile
+    cpus: 8
+    restart: always
+    networks: [app]
+
+  patreon:
+    build:
+      context: PatreonHandler
       dockerfile: Dockerfile
     restart: always
     networks: [app]
@@ -135,7 +321,7 @@ services:
       context: CronScheduler
       dockerfile: Dockerfile
     volumes:
-      - pgbackups:/backup/
+      - pgbackups2:/backup/
     restart: always
     networks: [app]
 
@@ -154,10 +340,54 @@ services:
     restart: always
     networks: [app]
 
+  postgres-exporter:
+    image: wrouesnel/postgres_exporter:v0.8.0
+    environment:
+      - DATA_SOURCE_URI=postgres/postgres?sslmode=disable
+      - DATA_SOURCE_USER=postgres
+      - DATA_SOURCE_PASS=postgres
+    restart: always
+    networks: [app]
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    command:
+      - '-allow_dynamic_housekeeping=false'
+      - '-housekeeping_interval=5s'
+      - '-docker_only=true'
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    restart: always
+    networks: [app]
+
+  blackbox:
+    build:
+      context: .
+      dockerfile: blackbox/Dockerfile.blackbox
+    cap_add: [ 'NET_ADMIN', 'NET_RAW' ]
+    restart: always
+    networks: [app]
+
+  router_exporter:
+    image: nshttpd/mikrotik-exporter:1.0.11
+    environment:
+      - DEVICE=router
+      - ADDRESS=192.168.11.227
+      - USER=prometheus
+      - PASSWORD=nqnmetrics
+    restart: always
+    networks: [app]
+
   nginx:
     build:
       context: .
       dockerfile: nginx/Dockerfile.nginx
+    healthcheck:
+      test: "[ \"$$(curl -s -o /dev/null -I -w \"%{http_code}\" http://localhost/api/commands)\" = \"200\" ]"
+      retries: 1
     restart: always
     ports:
      - "8002:80"
@@ -179,30 +409,46 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
 
   redis:
-    image: bitnami/redis:latest
+    image: bitnami/redis:7.0.4
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
       - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL,CONFIG
+    command: /opt/bitnami/scripts/redis/run.sh --save ""
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 1s
+      timeout: 3s
+      retries: 30
     volumes:
       - 'redis_data:/bitnami/redis/data'
     restart: always
     networks: [app]
 
   redis_cache:
-    image: bitnami/redis:latest
+    image: redis/redis-stack-server:latest
     environment:
-      - ALLOW_EMPTY_PASSWORD=yes
-      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL,CONFIG
+      REDIS_ARGS: --save ""
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 1s
+      timeout: 3s
+      retries: 30
     volumes:
-      - 'redis_cache_data:/bitnami/redis/data'
+      - 'redis_cache_data:/data'
     restart: always
     networks: [app]
 
   redis_persistent:
-    image: bitnami/redis:latest
+    image: bitnami/redis:7.0.4
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
-      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL,CONFIG
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+    command: /opt/bitnami/scripts/redis/run.sh --save ""
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 1s
+      timeout: 3s
+      retries: 30
     volumes:
       - 'persistent_redis_data:/bitnami/redis/data'
     restart: always
@@ -222,8 +468,11 @@ services:
     image: prom/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--web.enable-admin-api'
+      - '--storage.tsdb.retention.time=60d'
     volumes:
       - './prometheus/prometheus.yml:/etc/prometheus/prometheus.yml'
+      - 'prometheus:/prometheus/data'
     restart: always
     networks: [app]
 
@@ -236,29 +485,32 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=postgres
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
+      - postgres_data:/home/postgres/pgdata/data
     restart: always
     networks: [app]
 
   rabbit:
-    image: rabbitmq:3-management-alpine
+    build:
+      context: .
+      dockerfile: rabbit/Dockerfile.rabbit
     volumes:
       - rabbit_data:/var/lib/rabbitmq/
+    hostname: nqn_rabbit
     restart: always
     networks: [app]
 
-  netdata:
-    image: netdata/netdata
-    hostname: blue.nqn
-    cap_add:
-      - SYS_PTRACE
-    security_opt:
-      - apparmor:unconfined
-    volumes:
-      - /proc:/host/proc:ro
-      - /sys:/host/sys:ro
-    restart: always
-    networks: [app]
+#  netdata:
+#    image: netdata/netdata
+#    hostname: blue.nqn
+#    cap_add:
+#      - SYS_PTRACE
+#    security_opt:
+#      - apparmor:unconfined
+#    volumes:
+#      - /proc:/host/proc:ro
+#      - /sys:/host/sys:ro
+#    restart: always
+#    networks: [app]
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.8.1
@@ -266,7 +518,7 @@ services:
       - cluster.name=docker-cluster
       - bootstrap.memory_lock=true
       - xpack.security.enabled=false
-      - "ES_JAVA_OPTS=-Xms8192m -Xmx8192m"
+      - "ES_JAVA_OPTS=-Xms2g -Xmx2g -Dlog4j2.formatMsgNoLookups=true"
       - 'path.repo=/usr/share/elasticsearch/backup'
       - network.publish_host=127.0.0.1
       - cluster.initial_master_nodes=127.0.0.1
@@ -276,7 +528,7 @@ services:
         hard: -1
     volumes:
       - esdata:/usr/share/elasticsearch/data
-      - esbackups:/usr/share/elasticsearch/backup/backup
+      - esbackups:/usr/share/elasticsearch/backup
     restart: always
     networks: [app]
 
@@ -293,20 +545,32 @@ volumes:
     driver: local
   esbackups:
     driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '/mnt/backup_disk/nqndeploy_esbackups'
   redis_data:
     driver: local
   redis_cache_data:
+    driver: local
+  keydb_data:
     driver: local
   persistent_redis_data:
     driver: local
   postgres_data:
     driver: local
-  pgbackups:
+  pgbackups2:
     driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '/mnt/backup_disk/nqndeploy_pgbackups'
   rabbit_data:
     driver: local
   grafana_etc:
     driver: local
   grafana_lib:
+    driver: local
+  prometheus:
     driver: local
 
